@@ -128,6 +128,14 @@ public final class Person {
         return to < along ? dx > 0 : dx < 0;
     }
 
+    /** Whether it walks away from the viewer, up the map: the picture shows its back. */
+    public boolean facingUp() {
+        if (path.size() < 2 || !walking()) return false;
+        int i = Math.clamp((long) Math.floor(along), 0, path.size() - 2);
+        int dy = path.get(i + 1).row() - path.get(i).row();
+        return to < along ? dy > 0 : dy < 0;
+    }
+
     public boolean working() {
         return task == Task.AWAY || task == Task.BUILD;
     }
