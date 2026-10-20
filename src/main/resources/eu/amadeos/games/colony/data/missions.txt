@@ -1,0 +1,43 @@
+# What each mission gives the settlement and what it asks of it. Times in seconds.
+#
+#   map       the map in the folder maps, made in Tiled (see the README)
+#   start     the goods in the storehouse at the start, as pairs of good and count
+#   settlers  how many settlers live in the storehouse at the start
+#   goal      how many settlers the settlement must have to win
+#   goods     goods the storehouses must hold at the same time, as pairs (none if not given)
+#   years     the goal must be reached before this many years are over (0: no limit)
+#   seasons   the lengths of spring, summer, autumn and winter
+#   fire      yes if houses catch fire
+#   wolves    yes if wolves come from their dens in autumn and winter
+
+mission 1
+  map map1.tmx
+  start log 8 plank 30 stone 20 tools 8 bread 4 fish 2 cloth 3
+  settlers 48
+  goal 60
+  years 0
+  seasons 150 150 150 90
+  fire no
+  wolves no
+
+mission 2
+  map map2.tmx
+  start log 6 plank 26 stone 16 tools 6 bread 2 cloth 2
+  settlers 48
+  goal 66
+  goods cloth 4
+  years 4
+  seasons 150 150 150 100
+  fire yes
+  wolves no
+
+mission 3
+  map map3.tmx
+  start log 6 plank 26 stone 18 tools 6 bread 2 fish 2 cloth 2
+  settlers 48
+  goal 72
+  goods bread 8
+  years 5
+  seasons 120 130 120 170
+  fire yes
+  wolves yes
