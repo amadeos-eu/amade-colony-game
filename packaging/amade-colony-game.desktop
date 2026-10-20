@@ -1,0 +1,24 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=amadeOS Colony
+Name[de]=amadeOS Colony
+Name[fr]=amadeOS Colony
+Name[es]=amadeOS Colony
+Name[it]=amadeOS Colony
+GenericName=Economy Game
+GenericName[de]=Wirtschaftsspiel
+GenericName[fr]=Jeu de gestion
+GenericName[es]=Juego de economía
+GenericName[it]=Gioco di economia
+Comment=Lay roads, build supply chains and let a settlement grow through the seasons in three missions
+Comment[de]=Legen Sie Straßen, bauen Sie Warenketten auf und lassen Sie eine Siedlung in drei Missionen durch die Jahreszeiten wachsen
+Comment[fr]=Tracez des routes, bâtissez des chaînes de production et faites grandir une colonie au fil des saisons en trois missions
+Comment[es]=Trace caminos, construya cadenas de producción y haga crecer una colonia con las estaciones en tres misiones
+Comment[it]=Traccia strade, costruisci filiere e fai crescere una colonia nel corso delle stagioni in tre missioni
+Icon=amade-colony-game
+Exec=/usr/bin/amade-colony-game
+Terminal=false
+Categories=Game;StrategyGame;Simulation;
+Keywords=economy;settlement;roads;carriers;supply chain;simulation;game;
+StartupNotify=true

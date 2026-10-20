@@ -1,0 +1,8 @@
+# How the computer builds a settlement, on the title screen and in the tests.
+#
+#   build woodcutter quarry sawmill woodcutter forester well fisher tower farm sheepfarm weaver residence toolmaker farm windmill bakery tower residence fisher well sheepfarm farm residence woodcutter tower residence farm quarry residence
+#   roads   how many tiles a road may have before the computer puts a flag in its middle
+
+plan computer
+  build woodcutter quarry sawmill woodcutter forester well fisher tower farm sheepfarm weaver residence toolmaker farm windmill bakery tower residence fisher well sheepfarm farm residence woodcutter tower residence farm quarry residence
+  roads 6

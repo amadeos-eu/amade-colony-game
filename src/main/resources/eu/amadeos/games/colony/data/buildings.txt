@@ -1,0 +1,158 @@
+# The buildings of Colony. Change a number, start the game again, play.
+#
+#   tab       the tab of the panel it is built from: basic, food or crafts
+#   size      width and height in tiles; the flag stands below the middle of the bottom row
+#   cost      the goods the builder needs, as pairs of good and count; a building without a cost is not
+#             built, a map places it
+#   seconds   how long the builder works on it, with all goods there
+#   work      what the worker does: store, make, fell, plant, quarry, fish, farm, graze, settle or watch
+#   needs     the goods that go in, one word each; a|b takes a or b, whichever is there
+#   makes     the good that comes out (a settler, for settle)
+#   takes     how long one piece of work takes, in seconds, for make, graze and settle
+#   radius    how far the worker goes from the house, in tiles; the land claimed, for store and watch
+#   tool      yes if the worker needs tools before taking the job
+#   keep      how many of each good that goes in wait at the door, at most (2 if not given)
+#
+# The goods: log plank stone grain flour water bread fish wool cloth tools
+
+building storehouse
+  tab basic
+  size 3 2
+  work store
+  radius 12
+
+building woodcutter
+  tab basic
+  size 2 2
+  cost plank 2
+  seconds 10
+  work fell
+  makes log
+  radius 6
+  tool yes
+
+building forester
+  tab basic
+  size 2 2
+  cost plank 2
+  seconds 10
+  work plant
+  radius 5
+
+building quarry
+  tab basic
+  size 2 2
+  cost plank 2
+  seconds 10
+  work quarry
+  makes stone
+  radius 6
+  tool yes
+
+building sawmill
+  tab basic
+  size 2 2
+  cost plank 2 stone 2
+  seconds 14
+  work make
+  needs log
+  makes plank
+  takes 8
+  tool yes
+  keep 3
+
+building tower
+  tab basic
+  size 1 1
+  cost plank 2 stone 3
+  seconds 14
+  work watch
+  radius 9
+
+building well
+  tab food
+  size 1 1
+  cost plank 1 stone 1
+  seconds 8
+  work make
+  makes water
+  takes 8
+
+building fisher
+  tab food
+  size 2 2
+  cost plank 2
+  seconds 10
+  work fish
+  makes fish
+  radius 6
+  tool yes
+
+building farm
+  tab food
+  size 3 2
+  cost plank 3 stone 1
+  seconds 16
+  work farm
+  makes grain
+  radius 4
+  tool yes
+
+building windmill
+  tab food
+  size 2 2
+  cost plank 3 stone 2
+  seconds 16
+  work make
+  needs grain
+  makes flour
+  takes 9
+
+building bakery
+  tab food
+  size 2 2
+  cost plank 2 stone 2
+  seconds 14
+  work make
+  needs flour water
+  makes bread
+  takes 9
+
+building sheepfarm
+  tab crafts
+  size 4 3
+  cost plank 4 stone 1
+  seconds 18
+  work graze
+  needs grain water
+  makes wool
+  takes 14
+
+building weaver
+  tab crafts
+  size 2 2
+  cost plank 2 stone 2
+  seconds 14
+  work make
+  needs wool
+  makes cloth
+  takes 9
+
+building toolmaker
+  tab crafts
+  size 2 2
+  cost plank 3 stone 2
+  seconds 16
+  work make
+  needs plank stone
+  makes tools
+  takes 14
+
+building residence
+  tab crafts
+  size 2 2
+  cost plank 3 stone 3
+  seconds 18
+  work settle
+  needs bread|fish cloth
+  takes 16
