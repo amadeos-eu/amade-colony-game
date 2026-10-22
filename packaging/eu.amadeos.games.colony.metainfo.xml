@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- AppStream metadata of amade-colony-game, installed as /usr/share/metainfo/eu.amadeos.games.colony.metainfo.xml.
+     amadeOS Software shows it for the installed package; a repository's appstream-generator reads it too. -->
+<component type="desktop-application">
+  <id>eu.amadeos.games.colony</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>EUPL-1.2</project_license>
+
+  <name>amadeOS Colony</name>
+
+  <summary>Lay roads, build supply chains and let a settlement grow</summary>
+  <summary xml:lang="de">Straßen anlegen, Lieferketten aufbauen und eine Siedlung wachsen lassen</summary>
+  <summary xml:lang="fr">Tracez des routes, créez des filières et faites grandir une colonie</summary>
+  <summary xml:lang="es">Trace caminos, cree cadenas de suministro y haga crecer un asentamiento</summary>
+  <summary xml:lang="it">Traccia strade, crea filiere e fai crescere un insediamento</summary>
+
+  <description>
+    <p>The economy game of the amadeOS desktop: a green valley, a storehouse and a few dozen settlers. Lay out houses and link them with roads, flag to flag; carriers take the goods along, and woodcutters, farms, mills, bakeries and a sheep farm turn them into planks, bread and cloth.</p>
+    <p xml:lang="de">Das Wirtschaftsspiel des amadeOS-Desktops: ein grünes Tal, ein Lagerhaus und ein paar Dutzend Siedler. Legen Sie Häuser an und verbinden Sie sie mit Straßen, Fahne zu Fahne; Träger bringen die Waren weiter, und Holzfäller, Bauernhöfe, Mühlen, Bäckereien und eine Schäferei machen daraus Bretter, Brot und Tuch.</p>
+    <p xml:lang="fr">Le jeu d'économie du bureau amadeOS : une vallée verte, un entrepôt et quelques dizaines de colons. Placez des maisons et reliez-les par des routes, de drapeau en drapeau ; des porteurs acheminent les marchandises, et bûcherons, fermes, moulins, boulangeries et une bergerie en font des planches, du pain et du drap.</p>
+    <p xml:lang="es">El juego de economía del escritorio amadeOS: un valle verde, un almacén y unas decenas de colonos. Coloque casas y únalas con caminos, de bandera en bandera; los porteadores llevan las mercancías, y leñadores, granjas, molinos, panaderías y una granja de ovejas las convierten en tablas, pan y paño.</p>
+    <p xml:lang="it">Il gioco di economia del desktop amadeOS: una valle verde, un magazzino e qualche decina di coloni. Disponi le case e collegale con strade, di bandiera in bandiera; i portatori trasportano le merci, e taglialegna, fattorie, mulini, panetterie e un ovile le trasformano in assi, pane e stoffa.</p>
+    <ul>
+      <li>Seasons, house fires and wolves</li>
+      <li xml:lang="de">Jahreszeiten, Hausbrände und Wölfe</li>
+      <li xml:lang="fr">Saisons, incendies et loups</li>
+      <li xml:lang="es">Estaciones, incendios y lobos</li>
+      <li xml:lang="it">Stagioni, incendi e lupi</li>
+      <li>A goal for each mission</li>
+      <li xml:lang="de">Ein Ziel für jede Mission</li>
+      <li xml:lang="fr">Un objectif pour chaque mission</li>
+      <li xml:lang="es">Un objetivo para cada misión</li>
+      <li xml:lang="it">Un obiettivo per ogni missione</li>
+      <li>Save and load with F5 and F9</li>
+      <li xml:lang="de">Speichern und Laden mit F5 und F9</li>
+      <li xml:lang="fr">Sauvegarder et charger avec F5 et F9</li>
+      <li xml:lang="es">Guardar y cargar con F5 y F9</li>
+      <li xml:lang="it">Salvare e caricare con F5 e F9</li>
+      <li>Built on amade-game-engine; plays on other operating systems as well</li>
+      <li xml:lang="de">Gebaut auf amade-game-engine; läuft auch auf anderen Betriebssystemen</li>
+      <li xml:lang="fr">Construit sur amade-game-engine ; fonctionne aussi sur d'autres systèmes d'exploitation</li>
+      <li xml:lang="es">Hecho con amade-game-engine; funciona también en otros sistemas operativos</li>
+      <li xml:lang="it">Costruito su amade-game-engine; funziona anche su altri sistemi operativi</li>
+    </ul>
+  </description>
+
+  <launchable type="desktop-id">amade-colony-game.desktop</launchable>
+  <icon type="stock">amade-colony-game</icon>
+  <categories>
+    <category>Game</category>
+    <category>StrategyGame</category>
+    <category>Simulation</category>
+  </categories>
+
+  <url type="homepage">https://github.com/datazuul/amade-colony-game</url>
+  <url type="bugtracker">https://github.com/datazuul/amade-colony-game/issues</url>
+  <developer id="eu.amadeos">
+    <name>amadeOS Project</name>
+  </developer>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>The first buildings and roads</caption>
+      <caption xml:lang="de">Die ersten Gebäude und Straßen</caption>
+      <caption xml:lang="fr">Les premiers bâtiments et routes</caption>
+      <caption xml:lang="es">Los primeros edificios y caminos</caption>
+      <caption xml:lang="it">I primi edifici e strade</caption>
+      <image>https://raw.githubusercontent.com/datazuul/amade-colony-game/main/docs/screenshots/amade-colony-game.png</image>
+    </screenshot>
+  </screenshots>
+
+  <provides>
+    <binary>amade-colony-game</binary>
+  </provides>
+  <content_rating type="oars-1.1"/>
+</component>
