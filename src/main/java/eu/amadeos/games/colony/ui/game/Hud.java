@@ -27,6 +27,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
@@ -94,6 +95,8 @@ final class Hud {
     private final int[] grainAlpha = new int[300];
     /** What stays the same from frame to frame, drawn once: the bar, the panel, the faces of tabs, buttons and cells. */
     private final Map<String, Sprite> faces = new HashMap<>();
+    /** The logical width of the screen; the panel is drawn for {@link Field#WIDTH} and moved to the right edge. */
+    private double width = Field.WIDTH;
     private final Sprite settler;
 
     Hud(Messages msg, Pictures pictures) {
@@ -116,6 +119,12 @@ final class Hud {
      * What the panel shows that the game does not know: the tab, the chosen building, flag or road, the
      * building looking for its place, whether roads are being laid, the speed and where the mouse is.
      */
+    void resize(double width) {
+        if (width == this.width) return;
+        this.width = width;
+        faces.keySet().removeIf(key -> key.startsWith("bar "));
+    }
+
     record View(BuildingType.Tab tab, Building building, int flag, RoadNetwork.Road road, BuildingType placing,
                 boolean roads, int speed, double mouseX, double mouseY) {
         boolean over(Rectangle2D.Double box) {
@@ -129,11 +138,12 @@ final class Hud {
     /** The bar along the top: the goods in the storehouses, the settlers, the season and year, the speed, the clock. */
     void bar(Graphics2D g, Game game, int speed) {
         smooth(g);
-        face(g, "bar", 0, 0, Field.WIDTH, TOP, (sg, w, h) -> {
+        double barWidth = width;
+        face(g, "bar " + barWidth, 0, 0, barWidth, TOP, (sg, w, h) -> {
             sg.setPaint(new GradientPaint(0, 0, new Color(0x3A3128), 0, (float) TOP, new Color(0x241E18)));
-            sg.fill(new Rectangle2D.Double(0, 0, Field.WIDTH, TOP));
+            sg.fill(new Rectangle2D.Double(0, 0, barWidth, TOP));
             sg.setColor(BRASS);
-            sg.fill(new Rectangle2D.Double(0, TOP - 1, Field.WIDTH, 1));
+            sg.fill(new Rectangle2D.Double(0, TOP - 1, barWidth, 1));
             for (int i = 0; i < Good.values().length; i++) {
                 sg.setColor(BOX);
                 sg.fill(new RoundRectangle2D.Double(GOODS_LEFT + i * GOODS_STEP, 3.5, 40, 13, 4, 4));
@@ -176,7 +186,7 @@ final class Hud {
         g.setColor(LABEL);
         g.setFont(font(9, true));
         String clock = clock((int) game.time());
-        g.drawString(clock, (float) (Field.WIDTH - 6 - g.getFontMetrics().stringWidth(clock)), 13.5f);
+        g.drawString(clock, (float) (width - 6 - g.getFontMetrics().stringWidth(clock)), 13.5f);
     }
     // --8<-- [end:bar]
 
@@ -186,6 +196,8 @@ final class Hud {
     /** The panel on the right: the minimap, the build list, what is chosen and the buttons. */
     void panel(Graphics2D g, Game game, Minimap minimap, Camera camera, View view, double alpha) {
         smooth(g);
+        AffineTransform before = g.getTransform();
+        g.translate(width - Field.WIDTH, 0);
         face(g, "panel", LEFT, TOP, Field.PANEL, Field.HEIGHT - TOP, (sg, w, h) -> paintBackground(sg));
         minimap(g, game, minimap, camera, alpha);
         BuildingType.Tab[] tabs = BuildingType.Tab.values();
@@ -205,6 +217,7 @@ final class Hud {
         button(g, ROAD, msg.get("panel.road"), true, view.roads(), view.over(ROAD));
         button(g, TEAR_DOWN, msg.get("panel.tear"), tear, false, tear && view.over(TEAR_DOWN));
         button(g, MENU, msg.get("panel.menu"), true, false, view.over(MENU));
+        g.setTransform(before);
     }
     // --8<-- [end:panel]
 
@@ -692,8 +705,8 @@ final class Hud {
     }
     // --8<-- [end:card]
 
-    static double cardX(int index, int count) {
-        double left = (Field.WIDTH - count * CARD_WIDTH - (count - 1) * CARD_GAP) / 2;
+    double cardX(int index, int count) {
+        double left = (width - count * CARD_WIDTH - (count - 1) * CARD_GAP) / 2;
         return left + index * (CARD_WIDTH + CARD_GAP);
     }
 
@@ -725,9 +738,9 @@ final class Hud {
             g.setFont(font(11, false));
             g.setColor(CHALK);
             String label = msg.get(rows[i]);
-            g.drawString(label, (float) (Field.WIDTH / 2 + 10 - g.getFontMetrics().stringWidth(label)), (float) y);
+            g.drawString(label, (float) (width / 2 + 10 - g.getFontMetrics().stringWidth(label)), (float) y);
             g.setFont(font(11, true));
-            g.drawString(Integer.toString(values[i]), (float) Field.WIDTH / 2 + 30, (float) y);
+            g.drawString(Integer.toString(values[i]), (float) (width / 2 + 30), (float) y);
         }
         text(g, msg.get(won ? (last ? "won.last" : "won.next") : "lost.again"), 320, 13, false, CHALK);
     }
@@ -754,13 +767,13 @@ final class Hud {
     /** Darkens the screen so text over it stays readable. */
     void veil(Graphics2D g) {
         g.setColor(VEIL);
-        rectangle.setRect(0, 0, Field.WIDTH, Field.HEIGHT);
+        rectangle.setRect(0, 0, width, Field.HEIGHT);
         g.fill(rectangle);
     }
 
     /** A line of text centred on the screen, its baseline at {@code y}, with a shadow. */
     void text(Graphics2D g, String line, double y, int size, boolean bold, Color colour) {
-        text(g, line, Field.WIDTH / 2, y, size, bold, colour);
+        text(g, line, width / 2, y, size, bold, colour);
     }
 
     void text(Graphics2D g, String line, double x, double y, int size, boolean bold, Color colour) {
