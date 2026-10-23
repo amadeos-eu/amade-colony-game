@@ -82,6 +82,9 @@ public final class ColonyGame implements Arena {
     private int chosen = 1;
     private long seed = System.nanoTime();
     private GameLoop loop;
+    private GameCanvas canvas;
+    /** The logical width of the screen: {@link Field#WIDTH}, or more on a wide screen. */
+    private double width = Field.WIDTH;
 
     @Inject
     public ColonyGame(Keyboard keyboard, Mouse mouse, Messages msg, Progress progress, SaveSlot slot, Mixer mixer) {
@@ -119,6 +122,8 @@ public final class ColonyGame implements Arena {
 
     /** Starts the loop; the canvas draws the scenes' worlds and then their overlays. */
     public void start(GameCanvas canvas) {
+        this.canvas = canvas;
+        canvas.setMaxLogicalWidth(Field.MAX_WIDTH);
         loop = new GameLoop(UPDATES_PER_SECOND, FRAMES_PER_SECOND, this::update, canvas::render);
         loop.start();
     }
@@ -130,6 +135,7 @@ public final class ColonyGame implements Arena {
     void update(double seconds) {
         keyboard.poll();
         mouse.poll();
+        if (canvas != null) resize(canvas.logicalWidth());
         scenes.update(seconds);
     }
 
@@ -212,6 +218,17 @@ public final class ColonyGame implements Arena {
 
     // ---- the scenes ------------------------------------------------------------------------------
 
+    /** A new screen width: the map shows more or less, the panel moves to the right edge. */
+    void resize(double width) {
+        this.width = width;
+        hud.resize(width);
+    }
+
+    /** How much wider than {@link Field#WIDTH} the screen is: the panel sits that much further right. */
+    private double extra() {
+        return width - Field.WIDTH;
+    }
+
     /** A new ground for a game; the old ones are let go, so their pictures do not pile up. */
     private Terrain terrain(Game game) {
         terrains.clear();
@@ -221,13 +238,14 @@ public final class ColonyGame implements Arena {
         return terrain;
     }
 
-    private static Camera camera(Level level) {
-        return new Camera(Field.VIEW_WIDTH, Field.VIEW_HEIGHT, level.width() * Field.TILE, level.height() * Field.TILE)
-                .placedAt(0, Field.BAR);
+    private Camera camera(Level level) {
+        return new Camera(Field.VIEW_WIDTH + extra(), Field.VIEW_HEIGHT, level.width() * Field.TILE,
+                level.height() * Field.TILE).placedAt(0, Field.BAR);
     }
 
-    private static Camera wideCamera(Level level) {
-        return new Camera(Field.WIDTH, Field.HEIGHT, level.width() * Field.TILE, level.height() * Field.TILE);
+    /** The view of the whole screen, behind the title and the choice. */
+    private Camera wideCamera(Level level) {
+        return new Camera(width, Field.HEIGHT, level.width() * Field.TILE, level.height() * Field.TILE);
     }
 
     private Game newGame(int number) {
@@ -270,6 +288,7 @@ public final class ColonyGame implements Arena {
             Building home = demo.home();
             double cx = home == null ? camera.worldWidth() / 2 : home.x();
             double cy = home == null ? camera.worldHeight() / 2 : home.y();
+            camera.resize(width, Field.HEIGHT);
             camera.jumpTo(cx + Math.sin(time * 0.05) * 140, cy + Math.sin(time * 0.037) * 80);
         }
 
@@ -362,7 +381,7 @@ public final class ColonyGame implements Arena {
         int cardAt(double x, double y) {
             if (Double.isNaN(x) || y < Hud.CARD_TOP || y > Hud.CARD_TOP + Hud.CARD_HEIGHT) return 0;
             for (int i = 0; i < levels.size(); i++) {
-                double left = Hud.cardX(i, levels.size());
+                double left = hud.cardX(i, levels.size());
                 if (x >= left && x < left + Hud.CARD_WIDTH) return i + 1;
             }
             return 0;
@@ -374,6 +393,7 @@ public final class ColonyGame implements Arena {
             Game field = field(chosen);
             Terrain terrain = terrain(chosen);
             Camera camera = cameras.computeIfAbsent(chosen, n -> wideCamera(level));
+            camera.resize(width, Field.HEIGHT);
             double wayX = camera.worldWidth() - camera.viewWidth();
             double along = wayX <= 0 ? 0 : (time * TITLE_SPEED) % (2 * wayX);
             camera.jumpTo(camera.viewWidth() / 2 + (along < wayX ? along : 2 * wayX - along), field.home().y());
@@ -386,7 +406,7 @@ public final class ColonyGame implements Arena {
             hud.text(g, msg.get("select.title"), 70, 30, true, Hud.AMBER);
             for (int i = 0; i < levels.size(); i++) {
                 int number = i + 1;
-                hud.card(g, Hud.cardX(i, levels.size()), Hud.CARD_TOP, rules.mission(number), number <= progress.open(),
+                hud.card(g, hud.cardX(i, levels.size()), Hud.CARD_TOP, rules.mission(number), number <= progress.open(),
                         number == chosen, progress);
             }
             hud.text(g, msg.get("select.keys"), 330, 12, false, Hud.CHALK);
@@ -444,7 +464,7 @@ public final class ColonyGame implements Arena {
         PlayScene(Game settlement) {
             game = settlement;
             Level level = settlement.level();
-            camera = ColonyGame.camera(level);
+            camera = ColonyGame.this.camera(level);
             terrain = ColonyGame.this.terrain(settlement);
             minimap = new Minimap(Hud.MINIMAP.x, Hud.MINIMAP.y, Hud.MINIMAP.width, Hud.MINIMAP.height, level.width(),
                     level.height(), Field.TILE);
@@ -472,6 +492,7 @@ public final class ColonyGame implements Arena {
                 return;
             }
             if (controls.wasPressed(Action.LOAD) && load()) return;
+            camera.resize(Field.VIEW_WIDTH + extra(), Field.VIEW_HEIGHT);
             input(seconds);
             for (int i = 0; i < speed; i++) step(seconds);
             effects.update(seconds, game, camera);
@@ -569,7 +590,9 @@ public final class ColonyGame implements Arena {
         private void input(double seconds) {
             double mx = mouse.x();
             double my = mouse.y();
-            boolean onMap = !Double.isNaN(mx) && mx < Field.VIEW_WIDTH && my >= Field.BAR;
+            boolean onMap = !Double.isNaN(mx) && mx < Field.VIEW_WIDTH + extra() && my >= Field.BAR;
+            // The panel is laid out for the narrowest screen and moved to the right edge: so is the mouse.
+            double px = mx - extra();
             double wx = camera.worldX(mx);
             double wy = camera.worldY(my);
             Cell hover = onMap ? new Cell((int) Math.floor(wx / Field.TILE), (int) Math.floor(wy / Field.TILE)) : null;
@@ -595,11 +618,11 @@ public final class ColonyGame implements Arena {
             planning(hover);
             if (mouse.wasPressed(MouseEvent.BUTTON1)) {
                 if (onMap && hover != null) leftClick(hover);
-                else if (!onMap && mx >= Field.VIEW_WIDTH) panelClick(mx, my);
+                else if (!onMap && px >= Field.VIEW_WIDTH) panelClick(px, my);
             }
             if (mouse.wasPressed(MouseEvent.BUTTON3) && onMap) back();
             if (minimapDrag && mouse.isDown(MouseEvent.BUTTON1) && !Double.isNaN(mx)) {
-                camera.jumpTo(minimap.worldX(Math.clamp(mx, minimap.x(), minimap.x() + minimap.width())),
+                camera.jumpTo(minimap.worldX(Math.clamp(px, minimap.x(), minimap.x() + minimap.width())),
                         minimap.worldY(Math.clamp(my, minimap.y(), minimap.y() + minimap.height())));
             }
             if (!mouse.isDown(MouseEvent.BUTTON1)) minimapDrag = false;
@@ -794,7 +817,7 @@ public final class ColonyGame implements Arena {
             double dy = controls.axis(Action.UP, Action.DOWN) * PAN_SPEED * seconds;
             if (mouse.isInside() && !dragging && !minimapDrag && !Double.isNaN(mx)) {
                 if (mx < EDGE) dx -= PAN_SPEED * seconds;
-                if (mx > Field.WIDTH - EDGE) dx += PAN_SPEED * seconds;
+                if (mx > width - EDGE) dx += PAN_SPEED * seconds;
                 if (my < EDGE) dy -= PAN_SPEED * seconds;
                 if (my > Field.HEIGHT - EDGE) dy += PAN_SPEED * seconds;
             }
@@ -821,7 +844,8 @@ public final class ColonyGame implements Arena {
         public void renderOverlay(Graphics2D g, double alpha) {
             hud.bar(g, game, speed);
             hud.panel(g, game, minimap, camera,
-                    new Hud.View(tab, building, flag, road, placing, roads, speed, mouse.x(), mouse.y()), alpha);
+                    new Hud.View(tab, building, flag, road, placing, roads, speed, mouse.x() - extra(),
+                            mouse.y()), alpha);
             if (counts) {
                 hud.corner(g, msg.format("play.counts", game.people().size(), game.wares().size(),
                         game.roads().flags().size(), effects.particles()), Field.BAR + 12);
@@ -946,7 +970,7 @@ public final class ColonyGame implements Arena {
         }
 
         int rowAt(double x, double y) {
-            if (Double.isNaN(x) || Math.abs(x - Field.WIDTH / 2) > 90) return -1;
+            if (Double.isNaN(x) || Math.abs(x - width / 2) > 90) return -1;
             int row = (int) Math.floor((y - PAUSE_TOP + PAUSE_ROW * 0.7) / PAUSE_ROW);
             return row >= 0 && row < Choice.values().length ? row : -1;
         }

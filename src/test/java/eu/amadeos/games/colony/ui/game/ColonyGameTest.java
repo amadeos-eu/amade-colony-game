@@ -224,6 +224,24 @@ class ColonyGameTest {
         assertEquals(0, play.camera().x(), 1e-9, "the top left corner of the map");
     }
 
+    // --8<-- [start:test-wide]
+    @Test
+    void aWideScreenShowsMoreMapAndMovesThePanelToTheRightEdge() {
+        game.resize(711);                       // 16:9: 711 × 400
+        ColonyGame.PlayScene play = game.play(1);
+        steps(2);
+        assertEquals(Field.VIEW_WIDTH + 71, play.camera().viewWidth(), 1e-9, "the map gets the extra width");
+        double before = play.camera().x();
+        moveTo(play.minimap().x() + 71 + 2, play.minimap().y() + 2);   // the minimap, 71 units further right
+        click(MouseEvent.BUTTON1);
+        assertNotEquals(before, play.camera().x());
+        assertEquals(0, play.camera().x(), 1e-9, "the top left corner of the map");
+        moveTo(710, 200);                       // the real right edge of the screen moves the map
+        steps(10);
+        assertTrue(play.camera().x() > 0);
+    }
+    // --8<-- [end:test-wide]
+
     @Test
     void plusAndMinusChangeTheSpeed() {
         ColonyGame.PlayScene play = game.play(1);
