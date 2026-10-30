@@ -70,7 +70,7 @@ With `../amade-game-engine` (and `../amade-commons`) checked out next to this re
 
 From the engine: `RoadNetwork` (flags and roads), `Stock` and `Recipe` (goods in a building and what it makes of them), `Seasons`, `Territory` (the border), `Wander` (grazing sheep), `AStar`, `Minimap`, `Snapshot` (saving a whole game), `Catalog`, `TiledMap`, `Camera`, `Rotations` and `Sprite`, `Particles`, `SaveFile`, `GameLoop`, `GameCanvas`, `Sound`, `Tune` and `Mixer`, `Keyboard`, `Mouse` and `Controls`, `SceneStack`, `FullScreen`.
 
-Comments of the form `// --8<-- [start:name]` mark the excerpts the [Game Developer's Handbook](https://datazuul.github.io/amade-game-engine/) quotes; chapter 32 is about this game.
+Comments of the form `// --8<-- [start:name]` mark the excerpts the [Game Developer's Handbook](https://docs.amadeos.eu/amade-game-engine/) quotes; chapter 32 is about this game.
 
 ## Licence
 
