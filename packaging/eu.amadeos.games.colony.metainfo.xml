@@ -52,8 +52,8 @@
     <category>Simulation</category>
   </categories>
 
-  <url type="homepage">https://github.com/datazuul/amade-colony-game</url>
-  <url type="bugtracker">https://github.com/datazuul/amade-colony-game/issues</url>
+  <url type="homepage">https://github.com/amadeos-eu/amade-colony-game</url>
+  <url type="bugtracker">https://github.com/amadeos-eu/amade-colony-game/issues</url>
   <developer id="eu.amadeos">
     <name>amadeOS Project</name>
   </developer>
@@ -65,7 +65,7 @@
       <caption xml:lang="fr">Les premiers bâtiments et routes</caption>
       <caption xml:lang="es">Los primeros edificios y caminos</caption>
       <caption xml:lang="it">I primi edifici e strade</caption>
-      <image>https://raw.githubusercontent.com/datazuul/amade-colony-game/main/docs/screenshots/amade-colony-game.png</image>
+      <image>https://raw.githubusercontent.com/amadeos-eu/amade-colony-game/main/docs/screenshots/amade-colony-game.png</image>
     </screenshot>
   </screenshots>
 
