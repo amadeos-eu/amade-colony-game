@@ -121,7 +121,7 @@ Version: ${debVersion}
 Section: games
 Priority: optional
 Architecture: all
-Depends: openjdk-25-jre | java-runtime (>= 25)
+Depends: openjdk-25-jre | java-runtime (>= 25), amadeos-java-options
 Maintainer: amadeOS Project <developers@datazuul.com>
 Description: Economy and settlement game for amadeOS
  Found a settlement in the wild: lay roads from flag to flag, build
