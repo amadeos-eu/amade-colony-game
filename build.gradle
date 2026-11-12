@@ -87,8 +87,12 @@ tasks.register('deb') {
         }
 
         def launcher = new File(binDir, 'amade-colony-game')
+        // The options all amadeOS programs share (heap, garbage collector) come first from the argument file
+        // amadeos-session installs; the options after it win over them.
         launcher.text = """#!/bin/sh
-exec /usr/bin/java -jar /opt/amade-colony-game/amade-colony-game.jar "\$@"
+OPTIONS=/etc/amadeos/java/game.options
+[ -r "\$OPTIONS" ] || OPTIONS=/dev/null
+exec /usr/bin/java "@\$OPTIONS" -jar /opt/amade-colony-game/amade-colony-game.jar "\$@"
 """
         launcher.setExecutable(true, false)
 
